@@ -1,0 +1,20 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #0f141c;
+  color: #f4f7fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+textarea,
+select {
+  font: inherit;
+}
