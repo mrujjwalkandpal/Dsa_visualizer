@@ -24,7 +24,25 @@ const SortVisualizer = ({
   const [speed, setSpeed] = useState(700);
 
   // This mirrors the backend request payload: { numbers, target }.
-  const parsedNumbers = useMemo(() => parseNumbers(numbersInput), [numbersInput]);
+  const parsedNumbers = useMemo(
+    () => parseNumbers(numbersInput),
+    [numbersInput],
+  );
+
+  const getTypeClass = (type) => {
+    switch (type) {
+      case "SWAP":
+        return styles.swap;
+      case "COMPARE":
+        return styles.compare;
+      case "START":
+        return styles.start;
+      case "END":
+        return styles.end;
+      default:
+        return styles.defaultType;
+    }
+  };
 
   const steps = algorithmResponse?.reportList ?? [];
   const activeStep = steps[activeStepIndex] ?? null;
@@ -38,7 +56,9 @@ const SortVisualizer = ({
       return;
     }
 
-    setActiveStepIndex((currentIndex) => Math.min(currentIndex, steps.length - 1));
+    setActiveStepIndex((currentIndex) =>
+      Math.min(currentIndex, steps.length - 1),
+    );
   }, [steps]);
 
   useEffect(() => {
@@ -118,7 +138,9 @@ const SortVisualizer = ({
         {/* Shows the backend route this page will call for this algorithm */}
         <div className={styles.endpointBox}>
           <span className={styles.endpointLabel}>Backend Endpoint</span>
-          <code className={styles.endpoint}>POST /api/visualize/{algorithmKey}</code>
+          <code className={styles.endpoint}>
+            POST /api/visualize/{algorithmKey}
+          </code>
         </div>
       </div>
 
@@ -143,7 +165,9 @@ const SortVisualizer = ({
 
             {error ? <p className={styles.errorText}>{error}</p> : null}
             {loading ? (
-              <p className={styles.infoText}>Running {algorithmKey} on the backend...</p>
+              <p className={styles.infoText}>
+                Running {algorithmKey} on the backend...
+              </p>
             ) : null}
 
             <div className={styles.buttonRow}>
@@ -181,7 +205,9 @@ const SortVisualizer = ({
               </div>
               <div className={styles.statCard}>
                 <span className={styles.statLabel}>Complexity</span>
-                <strong>{algorithmResponse?.theoriticalComplexity ?? "-"}</strong>
+                <strong>
+                  {algorithmResponse?.theoriticalComplexity ?? "-"}
+                </strong>
               </div>
               <div className={styles.statCard}>
                 <span className={styles.statLabel}>Theoretical Steps</span>
@@ -196,13 +222,17 @@ const SortVisualizer = ({
             <div className={styles.viewerHeader}>
               <div>
                 <h2 className={styles.panelTitle}>Current Frame</h2>
-                <p className={styles.frameDescription}>
+                <p
+                  className={`${styles.frameDescription} ${getTypeClass(activeStep?.type)}`}
+                >
                   {activeStep?.desp ??
                     "Type numbers, then run the algorithm to load the backend frames here."}
                 </p>
               </div>
 
-              <span className={styles.stepBadge}>
+              <span
+                className={`${styles.stepBadge} ${getTypeClass(activeStep?.type)}`}
+              >
                 {activeStep
                   ? `${activeStep.type} | Step ${activeStepIndex + 1}/${steps.length}`
                   : "No Step Loaded"}
@@ -218,7 +248,10 @@ const SortVisualizer = ({
                 {isPlaying ? "Pause" : "Play"}
               </button>
               <div className={styles.speedControl}>
-                <label className={styles.speedLabel} htmlFor={`${algorithmKey}-speed`}>
+                <label
+                  className={styles.speedLabel}
+                  htmlFor={`${algorithmKey}-speed`}
+                >
                   Speed
                 </label>
                 <select
@@ -264,7 +297,9 @@ const SortVisualizer = ({
               <button
                 className={styles.secondaryButton}
                 onClick={() =>
-                  setActiveStepIndex((currentIndex) => Math.max(currentIndex - 1, 0))
+                  setActiveStepIndex((currentIndex) =>
+                    Math.max(currentIndex - 1, 0),
+                  )
                 }
                 disabled={!steps.length || activeStepIndex === 0 || isPlaying}
               >
@@ -278,7 +313,9 @@ const SortVisualizer = ({
                   )
                 }
                 disabled={
-                  !steps.length || activeStepIndex === steps.length - 1 || isPlaying
+                  !steps.length ||
+                  activeStepIndex === steps.length - 1 ||
+                  isPlaying
                 }
               >
                 Next
@@ -293,7 +330,7 @@ const SortVisualizer = ({
                 {steps.map((step, index) => {
                   const isSelected = index === activeStepIndex;
 
-                return (
+                  return (
                     <button
                       key={`${step.type}-${index}`}
                       className={`${styles.stepItem} ${
@@ -304,7 +341,11 @@ const SortVisualizer = ({
                       onClick={() => setActiveStepIndex(index)}
                     >
                       <span className={styles.stepTopRow}>
-                        <span className={styles.stepType}>{step.type}</span>
+                        <span
+                          className={`${styles.stepType} ${getTypeClass(step.type)}`}
+                        >
+                          {step.type}
+                        </span>
                         {isSelected ? (
                           <span className={styles.liveBadge}>
                             {isPlaying ? "Live" : "Current"}
@@ -318,7 +359,8 @@ const SortVisualizer = ({
               </div>
             ) : (
               <p className={styles.emptyState}>
-                No response loaded yet. Click `Run Algorithm` to fetch the step frames.
+                No response loaded yet. Click `Run Algorithm` to fetch the step
+                frames.
               </p>
             )}
           </div>
