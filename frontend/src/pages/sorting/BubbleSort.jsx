@@ -4,7 +4,7 @@ const BubbleSort = () => {
   return (
     <SortVisualizer
       title="Bubble Sort Visualizer"
-      description="This page is shaped around your Spring Boot response, including frame reports, active indexes, comparisons, swaps, and theoretical complexity."
+      description="Bubble Sort compares two nearby numbers and swaps if they are in the wrong order. This process repeats until everything is sorted."
       algorithmKey="bubble"
       defaultNumbers="5, 1, 4, 2, 8"
     />
